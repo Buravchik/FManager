@@ -1,0 +1,34 @@
+{
+	"authors":
+	[
+		"Buravchik <bezmerno@gmail.com>"
+	],
+	"dependencies":
+	{
+		"bootstrap": "~3.3.2",
+		"jquery": "~2.1.3"
+	},
+	"description": "What do we do now?",
+	"folders":
+	[
+		{
+			"path": "/Users/alexeyisachenko/projects/FuckupManager"
+		}
+	],
+	"ignore":
+	[
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	],
+	"license": "MIT",
+	"main": "index.html",
+	"moduleType":
+	[
+		"node"
+	],
+	"name": "FuckupManager",
+	"version": "0.0.0"
+}
