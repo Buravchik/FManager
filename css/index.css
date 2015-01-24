@@ -6,6 +6,7 @@
 }
 .story-container {
   resize: none;
+  align: center;
 
   width: 70%; 
   min-width:500px; 
@@ -28,4 +29,5 @@
   border: 3px solid #ddd;
   border-radius: 0;
   resize: none;
+  readonly: readonly;
 }
