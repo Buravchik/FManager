@@ -4,18 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=2">
+    <script src="https://cdn.firebase.com/js/client/2.1.1/firebase.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-    <title align="center">Firebase Cloud Chat</title>
+    <title align="center">Fuckup manager</title>
   </head>   
 
   <body border=1>
-    <div class="header" align="center"><h1>What should we do now?</h1></div>
     <div class="logo-container" align="center">
-      <img class="logo" src="images/logo1.jpg" height="200px"/>
+      <img class="logo" src="images/logo_s.png" height="200px"/>
     </div>
-    <div class="story-container">
-      <textarea class="textarea">
+    <div class="header" align="center"><h1>What should we do now?</h1></div>
+    
+    <div class="story-container" align="center">
+      <textarea class="textarea" resize="none" readonly="readonly">
         Very long story in container.Very long story in container.Very long story in container.Very long story in container.Very long story in container.
         Very long story in container.Very long story in container.Very long story in container.Very long story in container.Very long story in container.
         Very long story in container.Very long story in container.Very long story in container.Very long story in container.Very long story in container.
@@ -35,6 +38,68 @@
             <button type="button" class="btn btn-primary btn-lg btn-block">Вариант выбора 4</button>
             <button type="button" class="btn btn-primary btn-lg btn-block">Вариант выбора 5</button>
     </div>
-
+    <div class="role-selector" hidden=true style="margin:0  auto 0 auto;width:50%" align="center">
+      <div class="col-md-6 bg-success"><h2>Вы</h2></div>
+      <div class="col-md-6 bg-danger"><h2>Ваш противник</h2></div>
+      <div class="col-md-3" onClick="selectorClick(this)" id="good"><img src="images/good-bad_s_right.png" id="goodLeft"></img></div>      
+      <div class="col-md-3" onClick="selectorClick(this)" id="evil"><img src="images/good-bad_s_left.png" id="evilLeft"></img></div>
+      <div class="col-md-3"><img src="images/good-bad_s_right.png"></img></div>      
+      <div class="col-md-3"><img src="images/good-bad_s_left.png"></img></div>
+      <div class="col-md-3"><button type="button" class="btn btn-primary btn-lg">Персонаж</button></div>
+      <div class="col-md-3"><button type="button" class="btn btn-primary btn-lg">Злой рок</button></div>
+      <div class="col-md-3"><button type="button" class="btn btn-primary btn-lg" disabled="disabled">Персонаж</button></div>
+      <div class="col-md-3"><button type="button" class="btn btn-primary btn-lg" disabled="disabled">Злой рок</button></div>
+      <button type="button" class="btn btn-success"><h1>Выбрать</h1></button>
+    </div>
+    <div class="sessions-container" align="center">
+      <div>Игровые сессии</div>
+      <button class="btn-primary btn-lg" onClick="buttonClick(this)" id="newGame">Создать</button><br>
+    </div>
+    <script>
+      function selectorClick(e) {
+        //alert(e.id);
+        if (e.id == "good") {
+          $("#goodLeft").addClass("selected");
+          // $("#good").addClass("selected");
+          $("#evilLeft").removeClass("selected");
+          // $("#evil").removeClass("selected");
+        }
+        else {
+          $("#goodLeft").removeClass("selected");
+          // $("#good").removeClass("selected");
+          $("#evilLeft").addClass("selected");
+          // $("#evil").addClass("selected"); 
+        }
+      }
+      function buttonClick(e){
+        $(".sessions-container").hide();
+        $(".role-selector").fadeIn();
+        //alert(e.id);
+      };
+      var myFirebaseRef = new Firebase("https://incandescent-fire-5996.firebaseio.com/");
+      myFirebaseRef.child("sessions").on("child_added", function(snapshot) {
+        //console.log(snapshot.val());
+        var sessionsContainer = $('.sessions-container');
+        var sessionObject = snapshot.val();
+        
+        if (typeof sessionObject == "object") {
+          if (sessionObject.hasOwnProperty("players") && sessionObject.players.length<2) {
+            if (sessionObject.hasOwnProperty("sessionName")) {
+              var sessionElement = "<button class='btn-primary btn-lg session-element' onClick='buttonClick(this)' id="+ sessionObject.sessionName+">"+sessionObject.sessionName+":"+sessionObject.players[0]+(new Date(sessionObject.creationTime))+"</button></br>";
+              sessionsContainer.append( sessionElement );    
+            }
+          }
+        }
+        
+      });
+      $(document).ready(function(){
+        $(".logo-container").hide().fadeIn(1500).delay(1400).slideUp(700);
+        $(".header").hide().delay(500).fadeIn(1500);
+        $(".story-container").hide();
+        $(".buttons-container").hide();
+        
+        $(".sessions-container").hide().delay(1500).fadeIn(1400);
+      });
+    </script>
   </body>
 </html>
